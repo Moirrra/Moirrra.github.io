@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"moirrra.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.13.1","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Vue学习笔记的第三章，介绍了Vue脚手架的基本使用，todo-list组件化编码案例，一些组件通信方式（prop, 自定义事件，全局事件总线、消息订阅与发布），过渡和动画、配置代理服务器等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第三章 使用Vue脚手架">
+<meta property="og:url" content="https://moirrra.github.io/2022/10/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8Vue%E8%84%9A%E6%89%8B%E6%9E%B6/index.html">
+<meta property="og:site_name" content="Moirrra&#39;s blog">
+<meta property="og:description" content="Vue学习笔记的第三章，介绍了Vue脚手架的基本使用，todo-list组件化编码案例，一些组件通信方式（prop, 自定义事件，全局事件总线、消息订阅与发布），过渡和动画、配置代理服务器等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://moirrra.github.io/2022/10/images/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8Vue%E8%84%9A%E6%89%8B%E6%9E%B6/%E8%84%9A%E6%89%8B%E6%9E%B6%E6%96%87%E4%BB%B6.png">
+<meta property="og:image" content="https://moirrra.github.io/2022/10/images/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8Vue%E8%84%9A%E6%89%8B%E6%9E%B6/todo.png">
+<meta property="og:image" content="https://moirrra.github.io/2022/10/images/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8Vue%E8%84%9A%E6%89%8B%E6%9E%B6/%E8%BF%87%E6%B8%A1.png">
+<meta property="article:published_time" content="2022-10-24T07:59:51.000Z">
+<meta property="article:modified_time" content="2022-10-24T08:39:07.768Z">
+<meta property="article:author" content="Moirrra">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://moirrra.github.io/2022/10/images/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8Vue%E8%84%9A%E6%89%8B%E6%9E%B6/%E8%84%9A%E6%89%8B%E6%9E%B6%E6%96%87%E4%BB%B6.png">
+
+
+<link rel="canonical" href="https://moirrra.github.io/2022/10/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8Vue%E8%84%9A%E6%89%8B%E6%9E%B6/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://moirrra.github.io/2022/10/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8Vue%E8%84%9A%E6%89%8B%E6%9E%B6/","path":"2022/10/第三章-使用Vue脚手架/","title":"第三章 使用Vue脚手架"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>第三章 使用Vue脚手架 | Moirrra's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Moirrra's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E8%84%9A%E6%89%8B%E6%9E%B6"><span class="nav-number">1.</span> <span class="nav-text">初始化脚手架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#render%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.</span> <span class="nav-text">render函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">文件结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue-config-js%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.3.</span> <span class="nav-text">Vue.config.js配置文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ref%E4%B8%8Eprops"><span class="nav-number">2.</span> <span class="nav-text">ref与props</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ref%E5%B1%9E%E6%80%A7"><span class="nav-number">2.1.</span> <span class="nav-text">ref属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#props%E9%85%8D%E7%BD%AE"><span class="nav-number">2.2.</span> <span class="nav-text">props配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mixin%E6%B7%B7%E5%85%A5"><span class="nav-number">3.</span> <span class="nav-text">mixin混入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%92%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">插件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#plugins"><span class="nav-number">4.1.</span> <span class="nav-text">plugins</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scoped%E6%A0%B7%E5%BC%8F"><span class="nav-number">4.2.</span> <span class="nav-text">scoped样式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Todo-list%E6%A1%88%E4%BE%8B"><span class="nav-number">5.</span> <span class="nav-text">Todo-list案例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81%E6%B5%81%E7%A8%8B"><span class="nav-number">5.1.</span> <span class="nav-text">组件化编码流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E6%9C%AC%E5%9C%B0%E5%AD%98%E5%82%A8"><span class="nav-number">5.2.</span> <span class="nav-text">浏览器的本地存储</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6"><span class="nav-number">6.</span> <span class="nav-text">组件的自定义事件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF"><span class="nav-number">7.</span> <span class="nav-text">全局事件总线</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E8%AE%A2%E9%98%85%E4%B8%8E%E5%8F%91%E5%B8%83"><span class="nav-number">8.</span> <span class="nav-text">消息订阅与发布</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#nextTick"><span class="nav-number">8.1.</span> <span class="nav-text">nextTick</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%87%E6%B8%A1%E4%B8%8E%E5%8A%A8%E7%94%BB"><span class="nav-number">9.</span> <span class="nav-text">过渡与动画</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%90%86"><span class="nav-number">10.</span> <span class="nav-text">配置代理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80"><span class="nav-number">10.1.</span> <span class="nav-text">方法一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C"><span class="nav-number">10.2.</span> <span class="nav-text">方法二</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Moirrra"
+      src="/images/psc.png">
+  <p class="site-author-name" itemprop="name">Moirrra</p>
+  <div class="site-description" itemprop="description">学无止境</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Moirrra" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Moirrra" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://moirrra.github.io/2022/10/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8Vue%E8%84%9A%E6%89%8B%E6%9E%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/psc.png">
+      <meta itemprop="name" content="Moirrra">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Moirrra's blog">
+      <meta itemprop="description" content="学无止境">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="第三章 使用Vue脚手架 | Moirrra's blog">
+      <meta itemprop="description" content="Vue学习笔记的第三章，介绍了Vue脚手架的基本使用，todo-list组件化编码案例，一些组件通信方式（prop, 自定义事件，全局事件总线、消息订阅与发布），过渡和动画、配置代理服务器等。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          第三章 使用Vue脚手架
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-24 15:59:51 / 修改时间：16:39:07" itemprop="dateCreated datePublished" datetime="2022-10-24T15:59:51+08:00">2022-10-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">Vue学习笔记的第三章，介绍了Vue脚手架的基本使用，todo-list组件化编码案例，一些组件通信方式（prop, 自定义事件，全局事件总线、消息订阅与发布），过渡和动画、配置代理服务器等。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="初始化脚手架"><a href="#初始化脚手架" class="headerlink" title="初始化脚手架"></a>初始化脚手架</h1><h2 id="render函数"><a href="#render函数" class="headerlink" title="render函数"></a>render函数</h2><ul>
+<li>Vue &#x3D; 核心 + 模板解析器</li>
+<li>vue.js是完整版的Vue</li>
+<li>vue.runtime.xxx.js是运行版的Vue，只包含核心功能</li>
+<li>下面引用的vue.runtime.xxx.js是残缺版本的，没有模板解析器，vm中的模板不能解析（.vue中的可以），需要使用render</li>
+<li>函数接收到的createElement函数去指定内容</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">Vue</span> <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">App</span> <span class="keyword">from</span> <span class="string">&#x27;./App.vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">Vue</span>.<span class="property">config</span>.<span class="property">productionTip</span> = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Vue</span>(&#123;</span><br><span class="line">  <span class="attr">render</span>: <span class="function"><span class="params">h</span> =&gt;</span> <span class="title function_">h</span>(<span class="title class_">App</span>)</span><br><span class="line">&#125;).$mount(<span class="string">&#x27;#app&#x27;</span>)</span><br><span class="line"><span class="comment">// 相当于</span></span><br><span class="line"><span class="comment">// new Vue(&#123;</span></span><br><span class="line"><span class="comment">//   el:&#x27;#app&#x27;,</span></span><br><span class="line"><span class="comment">//   render: h =&gt; h(App)</span></span><br><span class="line"><span class="comment">// &#125;)</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">render</span>: <span class="keyword">function</span>(<span class="params">createElement</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="title function_">createElement</span>(<span class="title class_">App</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="attr">render</span>: <span class="keyword">function</span> (<span class="params">createElement</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">createElement</span>(<span class="string">&#x27;h2&#x27;</span>, <span class="string">&#x27;Hello Vue!&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h2> <img src="../images/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8Vue%E8%84%9A%E6%89%8B%E6%9E%B6/%E8%84%9A%E6%89%8B%E6%9E%B6%E6%96%87%E4%BB%B6.png" style="zoom:67%;" />
+
+<h2 id="Vue-config-js配置文件"><a href="#Vue-config-js配置文件" class="headerlink" title="Vue.config.js配置文件"></a>Vue.config.js配置文件</h2><ul>
+<li>使用vue inspect &gt; output.js 可以查看到Vue脚手架的默认配置</li>
+<li>使用vue.config.js可以对脚手架进行个性化定制</li>
+</ul>
+<h1 id="ref与props"><a href="#ref与props" class="headerlink" title="ref与props"></a>ref与props</h1><h2 id="ref属性"><a href="#ref属性" class="headerlink" title="ref属性"></a>ref属性</h2><ul>
+<li>被用来给元素或子组件注册引用信息（id的替代者）</li>
+<li>应用在html标签上获取的是真实DOM元素，应用在组件标签上是组件实例对象</li>
+<li>使用方式：<ul>
+<li>打标识：<code>&lt;h1 v-text=&quot;msg&quot; ref=&quot;title&quot;&gt;&lt;/h1&gt;</code></li>
+<li>获取：<code>this.$refs.title</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="props配置"><a href="#props配置" class="headerlink" title="props配置"></a>props配置</h2><ul>
+<li>功能：让组件接收外部传过来的数据</li>
+<li>传递数据：<code>&lt;Demo name=&quot;xxx&quot;/&gt;</code></li>
+<li>接收数据<ul>
+<li>方式一：直接接收 <code>props:[&#39;name&#39;]</code></li>
+<li>方式二：限制类型 <code>props:&#123; name: String &#125;</code></li>
+<li>方式三：限制类型、限制必要性、指定默认值</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">props</span>: &#123;</span><br><span class="line">  <span class="attr">name</span>:&#123;</span><br><span class="line">    <span class="attr">type</span>:<span class="title class_">String</span>,</span><br><span class="line">    <span class="attr">required</span>:<span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">age</span>:&#123;</span><br><span class="line">    <span class="attr">type</span>:<span class="title class_">Number</span>,</span><br><span class="line">    <span class="attr">default</span>:<span class="number">99</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ps: props是只读的，Vue底层会监测对props的修改，会警告；如果确实要修改，将props的内容复制一份到data，不要重名，修改和使用data中的数据</p>
+<h1 id="mixin混入"><a href="#mixin混入" class="headerlink" title="mixin混入"></a>mixin混入</h1><ul>
+<li>功能：可以把多个组件共用的配置提取成一个混入对象（代码复用）</li>
+<li>定义</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> h = &#123;</span><br><span class="line">    <span class="attr">methods</span>: &#123;</span><br><span class="line">        <span class="title function_">showName</span>(<span class="params"></span>)&#123;</span><br><span class="line">            <span class="title function_">alert</span>(<span class="variable language_">this</span>.<span class="property">schoolName</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">data</span>(<span class="params"></span>) &#123;</span><br><span class="line">          <span class="keyword">return</span> &#123;</span><br><span class="line">              <span class="attr">x</span>:<span class="number">100</span>,</span><br><span class="line">              <span class="attr">y</span>:<span class="number">200</span></span><br><span class="line">          &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>使用</p>
+<ul>
+<li>全局：import之后，<code>Vue.mixin(xxx)</code></li>
+<li>局部：在vm中：<code>mixins:[h1,h2]</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h1><h2 id="plugins"><a href="#plugins" class="headerlink" title="plugins"></a>plugins</h2><ol>
+<li><p>插件 (Plugins) 是一种能为 Vue 添加全局功能的工具代码</p>
+</li>
+<li><p>使用插件</p>
+<ol>
+<li>通过全局方法 <code>Vue.use()</code> 使用插件。它需要在你调用 new Vue() 启动应用之前完成（也可以传入一个可选的选项对象）：<code>Vue.use(MyPlugin, &#123; someOption: true &#125;)</code></li>
+</ol>
+</li>
+<li><p>编写插件 install方法</p>
+</li>
+</ol>
+<h2 id="scoped样式"><a href="#scoped样式" class="headerlink" title="scoped样式"></a>scoped样式</h2><ul>
+<li><p>问题：不同组件的同名style会冲突，以后import的为准</p>
+</li>
+<li><p>作用：让样式在局部生效，防止冲突</p>
+</li>
+<li><p>使用：<code>&lt;style scoped&gt;</code></p>
+</li>
+<li><p>原理：给标签添加了个特殊属性（随机生成），以示区别</p>
+</li>
+<li><p><code>&lt;style lang=&quot;less&quot;&gt;</code> 可以指定语法，默认css，使用less需要安装less-loader  可以指定语法，默认css，使用less需要安装less-loader</p>
+</li>
+</ul>
+<h1 id="Todo-list案例"><a href="#Todo-list案例" class="headerlink" title="Todo-list案例"></a>Todo-list案例</h1><h2 id="组件化编码流程"><a href="#组件化编码流程" class="headerlink" title="组件化编码流程"></a>组件化编码流程</h2><ol>
+<li>实现静态组件<ol>
+<li>创建组件：按功能点拆分，命名不要与HTML元素冲突</li>
+<li>引用组件</li>
+<li>把html和css拆到对应组件中</li>
+</ol>
+</li>
+</ol>
+<img src="../images/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8Vue%E8%84%9A%E6%89%8B%E6%9E%B6/todo.png" style="zoom:80%;" />
+
+<ol start="2">
+<li><p>展示动态数据</p>
+<ol>
+<li>数据类型：数组里有对象</li>
+<li>数据保存在哪个组件：<del>MyList</del>  App<br>a. 一个组件在用：放在组件自身<br>b.一些组件在用：放到共同父组件上（状态提升）</li>
+</ol>
+</li>
+<li><p>交互——从绑定事件监听开始</p>
+</li>
+</ol>
+<ul>
+<li><p>props适用于：</p>
+<ul>
+<li>父组件→子组件</li>
+<li>子组件→父组件 （父给子传一个函数）</li>
+</ul>
+</li>
+<li><p>v-model绑定的值不能是props传的，props中值不能修改</p>
+</li>
+<li><p>props中对象类型的值，修改对象的属性时不会报错，但不推荐</p>
+</li>
+</ul>
+<h2 id="浏览器的本地存储"><a href="#浏览器的本地存储" class="headerlink" title="浏览器的本地存储"></a>浏览器的本地存储</h2><ol>
+<li><p>存储内容大小一般为5MB</p>
+</li>
+<li><p>通过 <code>Window.sessionStorage</code> 和 <code>Window.localStorage</code> 属性实现</p>
+</li>
+<li><p>相关API</p>
+<ol>
+<li><p><code>xxxStrorage.setItem(&#39;key&#39;,&#39;value&#39;) </code></p>
+<p>把键值对添加到存储中，键名存在则更新对应值</p>
+</li>
+<li><p><code>xxxStrorage.getItem(&#39;key&#39;) </code> </p>
+<p>返回键名对应值</p>
+</li>
+<li><p><code>xxxStrorage.removeItem(&#39;key&#39;)</code></p>
+<p>把对应键值对从存储中删除</p>
+</li>
+<li><p><code>xxxStrorage.clear()</code></p>
+<p>清空存储中所有数据</p>
+</li>
+</ol>
+</li>
+<li><p>备注</p>
+<ol>
+<li><p>sessionStorage中内容随浏览器关闭而消失</p>
+</li>
+<li><p>localStorafe存储内容，需要手动清除</p>
+</li>
+<li><p>getItem获取不到的vlue，显示为null</p>
+</li>
+<li><p>JSON.parse(null)的结果依旧是null</p>
+</li>
+</ol>
+</li>
+</ol>
+<h1 id="组件的自定义事件"><a href="#组件的自定义事件" class="headerlink" title="组件的自定义事件"></a>组件的自定义事件</h1><ol>
+<li><p>组件间通信的方式：子组件B→父组件A</p>
+</li>
+<li><p>要在A中给B绑定自定义事件（事件的回调在A中）</p>
+</li>
+<li><p>使用方式：</p>
+<ol>
+<li><p>第一种方式：在父组件中：<code>&lt;Demo @atguigu=&quot;test&quot;&gt;</code>或 <code>&lt;Demo v-on:atguigu=&quot;test&quot;</code></p>
+<p>若想自定义事件只触发一次，使用once修饰符或$once方法</p>
+</li>
+<li><p>第二种方式：在父组件中：</p>
+</li>
+</ol>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;Demo ref=&quot;demo&quot;/&gt;</span><br><span class="line">......</span><br><span class="line">mounted()&#123;</span><br><span class="line">  this.$refs.xxx.$on(&#x27;atguigu&#x27;, this.test)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><p>子组件中，触发自定义事件：<code>this.$emit(&#39;atguigu&#39;, 数据)</code></p>
+</li>
+<li><p>子组件中，解绑自定义事件：<code>this.$off(&#39;atguigu&#39;)</code> （一般在beforeDestroy）</p>
+</li>
+<li><p>组件上也可以绑定原生DOM事件，需要使用native修饰符</p>
+</li>
+<li><p>注意：通过<code>this.$refs.xxx.$on(&#39;atguigu&#39;, 回调函数)</code>绑定自定义事件时，回调函数要么配置在methods中，要么用箭头函数，否则this指向会出错</p>
+</li>
+</ol>
+<h1 id="全局事件总线"><a href="#全局事件总线" class="headerlink" title="全局事件总线"></a>全局事件总线</h1><ol>
+<li>一种组件间通信的方式：任意组件间通信</li>
+<li>安装全局事件总线</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">new Vue(&#123;</span><br><span class="line"> ...</span><br><span class="line">  beforeCreate()&#123;</span><br><span class="line">    Vue.prototype.$bus = this // 安装全局事件总线</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;).$mount(&#x27;#app&#x27;)</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>使用</li>
+</ol>
+<p>​		① A组件接收数据，则在A组件中给$bus绑定自定义事件，回调也在A中（合并只能写成箭头函数）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">methods()&#123;</span><br><span class="line">	demo(data)&#123;...&#125;</span><br><span class="line">&#125;</span><br><span class="line">......</span><br><span class="line">mounted()&#123;</span><br><span class="line">  this.$bus.$on(&#x27;xxxx&#x27;,this.demo)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​		② B组件提供数据：<code>this.$bus.$emit(&#39;xxx&#39;, 数据)</code></p>
+<ol start="4">
+<li>最好在beforeDestroy钩子中，用$off解绑当前组件中用到的事件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">beforeDestroy() &#123;</span><br><span class="line">  this.$bus.$off(&#x27;xxxx&#x27;)</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<p>todo list应用：把父传子传子的改成全局总线</p>
+<h1 id="消息订阅与发布"><a href="#消息订阅与发布" class="headerlink" title="消息订阅与发布"></a>消息订阅与发布</h1><p>第三方库提供，不同库语法不同</p>
+<ol>
+<li>一种组件间通信的方式：任意组件间通信</li>
+<li>安装：<code>npm i pubsub-js</code></li>
+<li>引入：<code>import pubsub from &#39;pubsub-js&#39;</code></li>
+<li>接收数据：A组件想接收数据，则在A组件中订阅消息，订阅的回调留在A组件自身</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">methods()&#123;</span><br><span class="line">  demo(msgName, data)&#123;......&#125;</span><br><span class="line">&#125;</span><br><span class="line">......</span><br><span class="line">mounted()&#123;</span><br><span class="line">  this.pid = pubsub.subscribe(&#x27;xxx&#x27;, this.demo)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>提供数据：<code>pubsub.publish(&#39;xxx&#39;, 数据)</code></li>
+<li>最好在beforeDestroy钩子中，用 <code>pubsub.unsuscribe(pid)</code>去取消订阅</li>
+</ol>
+<h2 id="nextTick"><a href="#nextTick" class="headerlink" title="nextTick"></a>nextTick</h2><ol>
+<li><p>语法：<code>this.$nextTick(回调函数)</code></p>
+</li>
+<li><p>作用：在下一次DOM更新结束后执行其指定的回调</p>
+</li>
+<li><p>when：在改变数据后，要基于更新后的新DOM进行某些操作时，要在nextTick所指定的回调函数中执行（定时器也可以达到这个效果）</p>
+</li>
+</ol>
+<h1 id="过渡与动画"><a href="#过渡与动画" class="headerlink" title="过渡与动画"></a>过渡与动画</h1><ol>
+<li>作用：在插入、更新或移除DOM元素时，在合适的时候给元素添加样式类名（用transition标签包裹，加上特定类名，类名对应动画&#x2F;过渡，自己决定）</li>
+<li>图示</li>
+</ol>
+<img src="../images/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8Vue%E8%84%9A%E6%89%8B%E6%9E%B6/%E8%BF%87%E6%B8%A1.png" style="zoom:80%;" />
+
+<ol start="3">
+<li><p>写法</p>
+<ol>
+<li><p>准备好样式：</p>
+<ol>
+<li>元素进入的样式<ol>
+<li><code>v-enter</code>进入的起点</li>
+<li><code>v-enter-active</code> 进入过程中（CSS3动画只用这个）</li>
+<li><code>v-enter-to</code>进入的终点</li>
+</ol>
+</li>
+<li>元素离开的样式<ol>
+<li><code>v-leave</code>离开的起点</li>
+<li><code>v-leave-active</code> 离开过程中（CSS3动画只用这个）</li>
+<li><code>v-leave-to</code>离开的终点</li>
+</ol>
+</li>
+</ol>
+<p>ps: 进入的起点&#x3D;离开的终点，进入的终点&#x3D;离开的起点</p>
+</li>
+<li><p>使用 <code>&lt;transition&gt;</code> 包裹要过渡的元素，并配置name属性：(没有name就是v-xx)</p>
+</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">transition</span> <span class="attr">name</span>=<span class="string">&quot;hello&quot;</span> <span class="attr">appear</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">h1</span> <span class="attr">v-show</span>=<span class="string">&quot;isShow&quot;</span>&gt;</span>你好啊！<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">transition</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+ <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.hello-enter-active</span>,</span><br><span class="line"><span class="selector-class">.hello-leave-active</span> &#123;</span><br><span class="line">  <span class="attribute">transition</span>: opacity <span class="number">0.5s</span> ease;</span><br><span class="line">&#125;</span><br><span class="line">   </span><br><span class="line"><span class="selector-class">.hello-enter-from</span>,</span><br><span class="line"><span class="selector-class">.hello-leave-to</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>​		备注：有多个元素需要过渡，使用<code>&lt;transition-group&gt;</code> ，且每个元素都要指定<code>key</code>值</p>
+<p>​    </p>
+<h1 id="配置代理"><a href="#配置代理" class="headerlink" title="配置代理"></a>配置代理</h1><p>解决跨域问题，前端使用anxios</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&#x27;axios&#x27;</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;App&#x27;</span>,</span><br><span class="line">  <span class="attr">methods</span>: &#123;</span><br><span class="line">    <span class="title function_">getStudents</span>(<span class="params"></span>)&#123;</span><br><span class="line">      axios.<span class="title function_">get</span>(<span class="string">&#x27;http://localhost:8080/api/students&#x27;</span>).<span class="title function_">then</span>(</span><br><span class="line">        <span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;请求成功了&#x27;</span>, response.<span class="property">data</span>);</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;请求失败了&#x27;</span>, error.<span class="property">message</span>);</span><br><span class="line">        &#125;</span><br><span class="line">      )</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">getCars</span>(<span class="params"></span>)&#123;</span><br><span class="line">      axios.<span class="title function_">get</span>(<span class="string">&#x27;http://localhost:8080/demo/cars&#x27;</span>).<span class="title function_">then</span>(</span><br><span class="line">        <span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;请求成功了&#x27;</span>, response.<span class="property">data</span>);</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;请求失败了&#x27;</span>, error.<span class="property">message</span>);</span><br><span class="line">        &#125;</span><br><span class="line">      )</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h2><p>在vue.config.js中添加如下配置：5000是服务器端口名</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">devServer</span>:&#123;</span><br><span class="line">    <span class="attr">proxy</span>: <span class="string">&#x27;http://localhost:5000&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>优点：配置简单，请求资源时直接发给前端8080即可</li>
+<li>缺点：不能配置多个代理，不能灵活控制请求是否走代理</li>
+<li>工作方式：当请求了前端不存在的资源时，该请求会转发给服务器（优先匹配前端资源，public文件夹下）</li>
+</ul>
+<p>​		<code>axios.get(&#39;http://localhost:8080/students&#39;).then（）</code></p>
+<h2 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h2><p>编写vue.config.js配置具体代理规则：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">devServer</span>:&#123;</span><br><span class="line">  <span class="attr">proxy</span>:&#123;</span><br><span class="line">    <span class="string">&#x27;/api&#x27;</span>:&#123;</span><br><span class="line">      <span class="attr">target</span>:<span class="string">&#x27;http://localhost:5000&#x27;</span>,</span><br><span class="line">      <span class="attr">pathRewrite</span>:&#123;<span class="string">&#x27;^/api&#x27;</span>:<span class="string">&#x27;&#x27;</span>&#125;, <span class="comment">// 替换路径</span></span><br><span class="line">      <span class="attr">ws</span>: <span class="literal">true</span>, <span class="comment">// 用于支持websocket</span></span><br><span class="line">      <span class="attr">changeOrigin</span>: <span class="literal">false</span> <span class="comment">// 用于控制请求头中的host值</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&#x27;/demo&#x27;</span>:&#123;</span><br><span class="line">      <span class="attr">target</span>:<span class="string">&#x27;http://localhost:5001&#x27;</span>,</span><br><span class="line">      <span class="attr">pathRewrite</span>:&#123;<span class="string">&#x27;^/demo&#x27;</span>:<span class="string">&#x27;&#x27;</span>&#125;, <span class="comment">// 替换路径</span></span><br><span class="line">      <span class="attr">ws</span>: <span class="literal">true</span>, <span class="comment">// 用于支持websocket</span></span><br><span class="line">      <span class="attr">changeOrigin</span>: <span class="literal">true</span><span class="comment">// 用于控制请求头中的host值</span></span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>优点：可以配置多个代理，且可以灵活控制请求是否走代理</li>
+<li>缺点：配置略微繁琐，请求资源时必须加前缀</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Moirrra
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://moirrra.github.io/2022/10/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8Vue%E8%84%9A%E6%89%8B%E6%9E%B6/" title="第三章 使用Vue脚手架">https://moirrra.github.io/2022/10/第三章-使用Vue脚手架/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+              <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
+              <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># 学习笔记</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/%E7%AC%AC%E4%BA%8C%E7%AB%A0-Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A8%8B/" rel="prev" title="第二章 Vue组件化编程">
+                  <i class="fa fa-chevron-left"></i> 第二章 Vue组件化编程
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Moirrra</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+</html>
